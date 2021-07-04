@@ -1,0 +1,2 @@
+class ChainUser < User
+end

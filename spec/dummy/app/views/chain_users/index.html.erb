@@ -1,0 +1,5 @@
+<% @users.each do |user| %>
+  <%= link_to_if policy(user).allowed(:show?), 'Show', { action: :show, id: user.id } %>
+  <%= user.id %>: <%= user.name %>
+  <br>
+<% end %>
