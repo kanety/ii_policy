@@ -1,7 +1,15 @@
 describe IIPolicy::Base do
+  let :current_user do
+    User.find(1)
+  end
+
+  let :current_item do
+    Item.find(1)
+  end
+
   context 'properties' do
     let :policy do
-      UserPolicy.new(user: User.find(1))
+      ItemPolicy.new(user: current_user, item: current_item)
     end
 
     it 'gets context' do
@@ -11,7 +19,7 @@ describe IIPolicy::Base do
 
   context 'methods' do
     let :policy do
-      UserPolicy.new(user: User.find(1))
+      ItemPolicy.new(user: current_user, item: current_item)
     end
 
     it 'calls allowed' do
@@ -19,7 +27,7 @@ describe IIPolicy::Base do
     end
 
     it 'gets policy of other object' do
-      expect(policy.policy(User.find(1))).to be_kind_of(UserPolicy)
+      expect(policy.policy(current_item)).to be_kind_of(ItemPolicy)
     end
   end
 end

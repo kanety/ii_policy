@@ -1,23 +1,51 @@
 describe IIPolicy::Lookup, type: :request do
-  it 'lookups from model' do
-    expect(IIPolicy::Base.lookup(User)).to eq(UserPolicy)
-  end
-
-  it 'lookups from controller' do
-    expect(IIPolicy::Base.lookup(UsersController)).to eq(UserPolicy)
-  end
-
-  it 'returns nil if model does not find' do
-    expect(IIPolicy::Base.lookup(Lookups::Unknown)).to eq(nil)
-  end
-
-  context 'inherited' do
-    it 'lookups from model' do
-      expect(IIPolicy::Base.lookup(Lookups::User)).to eq(Lookups::UserPolicy)
+  context 'from model' do
+    let :klass do
+      Item
     end
 
-    it 'lookups from model of superclass' do
-      expect(IIPolicy::Base.lookup(Lookups::SharedUser)).to eq(UserPolicy)
+    it 'lookups policy' do
+      expect(IIPolicy::Base.lookup(klass)).to eq(ItemPolicy)
+    end
+  end
+
+  context 'from controller' do
+    let :klass do
+      ItemsController
+    end
+
+    it 'lookups policy' do
+      expect(IIPolicy::Base.lookup(klass)).to eq(ItemPolicy)
+    end
+  end
+
+  context 'from unknown model' do
+    let :klass do
+      Lookups::Unknown
+    end
+
+    it 'returns nil if model does not find' do
+      expect(IIPolicy::Base.lookup(klass)).to eq(nil)
+    end
+  end
+
+  context 'from inherited model' do
+    let :klass do
+      Lookups::Item
+    end
+
+    it 'lookups policy' do
+      expect(IIPolicy::Base.lookup(klass)).to eq(Lookups::ItemPolicy)
+    end
+  end
+
+  context 'from superclass of inherited model' do
+    let :klass do
+      Lookups::SharedItem
+    end
+
+    it 'lookups policy' do
+      expect(IIPolicy::Base.lookup(klass)).to eq(ItemPolicy)
     end
   end
 end

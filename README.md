@@ -2,6 +2,8 @@
 
 A base policy to support management of authorization logic.
 
+This gem is inspired by [pundit](https://github.com/varvet/pundit) specs.
+
 ## Dependencies
 
 * ruby 2.3+
@@ -24,21 +26,21 @@ Then execute:
 Prepare model:
 
 ```ruby
-class User < ActiveRecord::Base
+class Item < ActiveRecord::Base
 end
 ```
 
 Prepare controller with `current_user` and call `authorize`:
 
 ```ruby
-class UsersController < ActionController::Base
+class ItemsController < ActionController::Base
   def index
-    @policy = authorize(UserPolicy)
-    @items = User.all
+    @policy = authorize(ItemPolicy)
+    @items = Item.all
   end
 
   def show
-    @item = User.find(params[:id])
+    @item = Item.find(params[:id])
     @policy = authorize(@item)
   end
 
@@ -51,7 +53,7 @@ end
 Create policy that has methods corresponding with actions of controller:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
   def index?
     @user.admin?
   end
@@ -71,21 +73,21 @@ end
 # no argument (policy class is looked up using the name of controller class)
 authorize
 
+# model instance (policy class is looked up using the name of instance's class)
+authorize(@item)
+
 # policy class
-authorize(UserPolicy)
+authorize(ItemPolicy)
 
-# object
-authorize(@user)
-
-# second argument is extra policy context
-authorize(@user, something: 'something')
+# with extra context as second argument
+authorize(@item, something: 'something')
 ```
 
-The policy context is automatically set to `{ user: current_user }` in the controller.
-You can set any context you want by overriding `policy_context`:
+Context is automatically set to `{ user: current_user }` in the controller by default.
+You can set other context you want by overriding `policy_context`:
 
 ```ruby
-class UsersController < ActionController::Base
+class ItemsController < ActionController::Base
   def policy_context
     super.merge(something: 'something')
   end
@@ -96,7 +98,7 @@ When current user is not authoized, `IIPolicy::AuthorizationError` is raised.
 You can catch the error and render a special page using `rescue_from`:
 
 ```ruby
-class UsersController < ActionController::Base
+class ItemsController < ActionController::Base
   rescue_from IIPolicy::AuthorizationError, with: -> { ... }
 end
 ```
@@ -105,10 +107,10 @@ You can also create policy instance by yourself and check authorization using `a
 
 ```ruby
 # policy class
-policy(UserPolicy).allowed(:index?)
+policy(ItemPolicy).allowed(:index?)
 
-# object
-policy(@user).allowed(:index?)
+# model instance
+policy(@item).allowed(:index?)
 ```
 
 ### Policy
@@ -116,7 +118,7 @@ policy(@user).allowed(:index?)
 Policy has following attributes:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
   def index?
     puts "user: #{@user}"
     puts "item: #{@item}"
@@ -124,17 +126,17 @@ class UserPolicy < IIPolicy::Base
   end
 end
 
-policy = UserPolicy.new(user: User.find(1), item: User.find(2), something: 'something')
+policy = ItemPolicy.new(user: User.find(1), item: Item.find(1), something: 'something')
 policy.allowed(:index?)
-#=> user: #<User: id=1...>
-#   item: #<User: id=2...>
+#=> user: #<User: ...>
+#   item: #<Item: ...>
 #   context: #<IIPolicy::Context user=..., item=..., something="something">
 ```
 
 You can call another policy method in the same context:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
   def another_show?
     allowed(:show?)
   end
@@ -144,9 +146,9 @@ end
 You can use policy for another object by using `policy`:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
   def another_show?
-    policy(@context.another_user).allowed(:show?)
+    policy(@context.another_item).allowed(:show?)
   end
 end
 ```
@@ -162,7 +164,7 @@ Following callbacks are available:
 For example:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
   before_call do
     @something = @context.something
   end
@@ -185,8 +187,8 @@ class SharedPolicy < IIPolicy::Base
   end
 end
 
-# specific policy
-class UserPolicy < IIPolicy::Base
+# item policy
+class ItemPolicy < IIPolicy::Base
   include IIPolicy::Chain
 
   chain SharedPolicy
@@ -195,9 +197,13 @@ class UserPolicy < IIPolicy::Base
     @item.status != 'deleted'
   end
 end
+
+policy = ItemPolicy.new(user: User.find(1), item: Item.find(1))
+policy.allowed(:show?)
+#=> true
 ```
 
-In this example, `UserPolicy#show?` is evaluated by `SharedPolicy#show?` AND `UserPolicy#show?`.
+In this example, `policy.allowed(:show?)` is evaluated by `SharedPolicy#show?` AND `ItemPolicy#show?`.
 
 ### Lookup for policy
 
@@ -206,53 +212,42 @@ So the name of policy class should be composed of the base name of model or cont
 For example:
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
 end
 
-class User
+class Item
 end
 
-class UsersController < ActionController::Base
+class ItemsController < ActionController::Base
 end
 
-IIPolicy::Base.lookup(User)
-#=> UserPolicy
+IIPolicy::Base.lookup(Item)
+#=> ItemPolicy
 
-IIPolicy::Base.lookup(UsersController)
-#=> UserPolicy
-```
+IIPolicy::Base.lookup(Item.new)
+#=> ItemPolicy
 
-```ruby
-class Namespaced::UserPolicy < IIPolicy::Base
-end
-
-class Namespaced::User
-end
-
-class Namespaced::UsersController < ActionController::Base
-end
-
-IIPolicy::Base.lookup(Namespaced::User)
-#=> Namespaced::UserPolicy
-
-IIPolicy::Base.lookup(Namespaced::UsersController)
-#=> Namespaced::UserPolicy
+IIPolicy::Base.lookup(ItemsController)
+#=> ItemPolicy
 ```
 
 Note that superclass of model or controller is also looked up until policy is found.
 
 ```ruby
-class UserPolicy < IIPolicy::Base
+class ItemPolicy < IIPolicy::Base
 end
 
-class User
+class Item
 end
 
-class Inherited::User < User
+class InheritedItem < Item
 end
 
-IIPolicy::Base.lookup(Inherited::User)
-#=> UserPolicy
+IIPolicy::Base.lookup(InheritedItem)
+#=> ItemPolicy
+
+IIPolicy::Base.lookup(InheritedItem.new)
+#=> ItemPolicy
 ```
 
 ## Contributing

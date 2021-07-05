@@ -1,10 +1,10 @@
 describe IIPolicy::Chain do
-  let(:user) do
+  let :current_user do
     User.find(1)
   end
 
-  let(:policy) do
-    ChainUserPolicy.new(user: user)
+  let :policy do
+    ChainItemPolicy.new(user: current_user)
   end
 
   it 'chains policies' do

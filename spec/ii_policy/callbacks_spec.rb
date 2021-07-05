@@ -1,7 +1,11 @@
 describe IIPolicy::Callbacks do
+  let :current_user do
+    User.find(1)
+  end
+
   context 'before' do
     let :policy do
-      Callbacks::BeforePolicy.new(user: User.find(1))
+      Callbacks::BeforePolicy.new(user: current_user)
     end
 
     it 'calls callback' do
@@ -12,7 +16,7 @@ describe IIPolicy::Callbacks do
 
   context 'after' do
     let :policy do
-      Callbacks::AfterPolicy.new(user: User.find(1))
+      Callbacks::AfterPolicy.new(user: current_user)
     end
 
     it 'calls callback' do
@@ -23,7 +27,7 @@ describe IIPolicy::Callbacks do
 
   context 'around' do
     let :policy do
-      Callbacks::AroundPolicy.new(user: User.find(1))
+      Callbacks::AroundPolicy.new(user: current_user)
     end
 
     it 'calls callback' do

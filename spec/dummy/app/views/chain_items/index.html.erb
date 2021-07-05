@@ -1,0 +1,5 @@
+<% @items.each do |item| %>
+  <%= link_to_if policy(item).allowed(:show?), 'Show', { action: :show, id: item.id } %>
+  <%= item.id %>: <%= item.name %>
+  <br>
+<% end %>

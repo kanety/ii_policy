@@ -13,7 +13,7 @@ describe IIPolicy::Config do
     end
 
     it 'gets and sets' do
-      expect(IIPolicy::Config.lookup_cache).to eq(false)
+      expect(IIPolicy.config.lookup_cache).to eq(false)
     end
   end
 end

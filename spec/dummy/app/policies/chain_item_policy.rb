@@ -1,4 +1,4 @@
-class ChainUserPolicy < IIPolicy::Base
+class ChainItemPolicy < IIPolicy::Base
   include IIPolicy::Chain
 
   chain Chains::APolicy, Chains::BPolicy

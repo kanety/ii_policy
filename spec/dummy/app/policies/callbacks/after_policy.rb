@@ -1,4 +1,4 @@
-class Callbacks::AfterPolicy < UserPolicy
+class Callbacks::AfterPolicy < ItemPolicy
   after_call do
     @callback = 'after'
   end

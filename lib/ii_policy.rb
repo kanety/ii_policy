@@ -13,5 +13,9 @@ module IIPolicy
     def configure
       yield Config
     end
+
+    def config
+      Config
+    end
   end
 end

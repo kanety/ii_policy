@@ -6,10 +6,10 @@ class Chains::BPolicy < IIPolicy::Base
   end
 
   def index?
-    @user.id == 1
+    @user.admin?
   end
 
   def show?
-    @user.id == 1
+    @user.admin?
   end
 end

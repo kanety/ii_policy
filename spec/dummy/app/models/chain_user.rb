@@ -1,2 +1,0 @@
-class ChainUser < User
-end
