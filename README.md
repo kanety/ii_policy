@@ -73,7 +73,7 @@ end
 # no argument (policy class is looked up using the name of controller class)
 authorize
 
-# model instance (policy class is looked up using the name of instance's class)
+# instance (policy class is looked up using the name of instance's class)
 authorize(@item)
 
 # policy class
@@ -83,7 +83,7 @@ authorize(ItemPolicy)
 authorize(@item, something: 'something')
 ```
 
-Context is automatically set to `{ user: current_user }` in the controller by default.
+Context is set to `{ user: current_user }` in the controller by default.
 You can set other context you want by overriding `policy_context`:
 
 ```ruby
@@ -109,7 +109,7 @@ You can also create policy instance by yourself and check authorization using `a
 # policy class
 policy(ItemPolicy).allowed(:index?)
 
-# model instance
+# instance
 policy(@item).allowed(:index?)
 ```
 
@@ -143,7 +143,7 @@ class ItemPolicy < IIPolicy::Base
 end
 ```
 
-You can use policy for another object by using `policy`:
+You can use policy for another instance by using `policy`:
 
 ```ruby
 class ItemPolicy < IIPolicy::Base
@@ -177,7 +177,7 @@ end
 
 #### Policy chain
 
-You can chain shared policies into specific policy:
+You can chain shared policies to base policy by including `IIPolicy::Chain` as follows:
 
 ```ruby
 # shared policy
@@ -187,7 +187,7 @@ class SharedPolicy < IIPolicy::Base
   end
 end
 
-# item policy
+# base policy
 class ItemPolicy < IIPolicy::Base
   include IIPolicy::Chain
 
@@ -203,11 +203,11 @@ policy.allowed(:show?)
 #=> true
 ```
 
-In this example, `policy.allowed(:show?)` is evaluated by `SharedPolicy#show?` AND `ItemPolicy#show?`.
+In this example, `policy.allowed(:show?)` is evaluated by `SharedPolicy#show? && ItemPolicy#show?`.
 
 ### Lookup for policy
 
-`authorize` and `policy` lookups policy class in case the first argument is not a policy class.
+`authorize` and `policy` lookups policy class if the first argument of them is not a policy class.
 So the name of policy class should be composed of the base name of model or controller.
 For example:
 
