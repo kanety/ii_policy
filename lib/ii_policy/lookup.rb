@@ -11,14 +11,14 @@ module IIPolicy
     end
 
     class << self
-      class_attribute :_cache
-      self._cache = {}
+      class_attribute :cache
+      self.cache = {}
 
       def call(klass)
         klass = klass.class unless klass.is_a?(Module)
         return if terminate?(klass)
 
-        cache(klass) do
+        with_cache(klass) do
           if klass.name && (policy = resolve(klass))
             policy
           elsif klass.superclass
@@ -29,9 +29,9 @@ module IIPolicy
 
       private
 
-      def cache(klass)
+      def with_cache(klass)
         if Config.lookup_cache
-          self._cache[klass] ||= yield
+          self.cache[klass] ||= yield
         else
           yield
         end

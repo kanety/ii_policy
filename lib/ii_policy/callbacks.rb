@@ -9,6 +9,12 @@ module IIPolicy
       define_callbacks :call
     end
 
+    def call(action)
+      run_callbacks(:call) do
+        super
+      end
+    end
+
     class_methods do
       def before_call(*args, &block)
         set_callback(:call, :before, *args, &block)
