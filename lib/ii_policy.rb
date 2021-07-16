@@ -6,6 +6,7 @@ require 'ii_policy/errors'
 require 'ii_policy/base'
 require 'ii_policy/controller'
 require 'ii_policy/helper'
+require 'ii_policy/log_subscriber'
 require 'ii_policy/railtie' if defined?(Rails)
 
 module IIPolicy

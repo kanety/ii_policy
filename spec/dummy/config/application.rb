@@ -9,5 +9,8 @@ require "ii_policy"
 
 module Dummy
   class Application < Rails::Application
+    config.after_initialize do
+      IIPolicy::LogSubscriber.attach_to(:ii_policy)
+    end
   end
 end

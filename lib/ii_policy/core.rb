@@ -5,7 +5,7 @@ module IIPolicy
     extend ActiveSupport::Concern
 
     included do
-      attr_reader :context, :user, :item
+      attr_reader :context, :user, :item, :_result
     end
 
     def initialize(context = {})
@@ -19,8 +19,11 @@ module IIPolicy
     end
 
     def call(action)
-      return false if respond_to?(action) && !send(action)
-      return true
+      if respond_to?(action) && !send(action)
+        @_result = false
+      else
+        @_result = true
+      end
     end
 
     def allowed(action)
