@@ -177,7 +177,7 @@ end
 
 #### Policy chain
 
-You can chain shared policies to base policy by including `IIPolicy::Chain` as follows:
+You can chain shared policies to base policy by using `chain` as follows:
 
 ```ruby
 # shared policy
@@ -189,8 +189,6 @@ end
 
 # base policy
 class ItemPolicy < IIPolicy::Base
-  include IIPolicy::Chain
-
   chain SharedPolicy
 
   def show?

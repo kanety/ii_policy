@@ -1,6 +1,4 @@
 class ChainItemPolicy < IIPolicy::Base
-  include IIPolicy::Chain
-
   chain Chains::APolicy, Chains::BPolicy
 
   before_call do

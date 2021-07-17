@@ -1,4 +1,4 @@
-describe IIPolicy::Lookup, type: :request do
+describe IIPolicy::Lookup do
   context 'from model' do
     let :klass do
       Item

@@ -13,5 +13,6 @@ module IIPolicy
     include Callbacks
     include Instrumentation
     include Lookup
+    include Chain
   end
 end
