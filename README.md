@@ -203,6 +203,23 @@ policy.allowed(:show?)
 
 In this example, `policy.allowed(:show?)` is evaluated by `SharedPolicy#show? && ItemPolicy#show?`.
 
+You can also use method or block to find policy class dynamically:
+
+```ruby
+class ItemPolicy < IIPolicy::Base
+  chain -> { SharedPolicy }
+end
+
+class ItemPolicy < IIPolicy::Base
+  chain :chain_policy
+
+  def chain_policy
+    SharedPolicy
+  end
+end
+```
+
+
 ### Lookup for policy
 
 `authorize` and `policy` lookups policy class if the first argument of them is not a policy class.
@@ -246,6 +263,21 @@ IIPolicy::Base.lookup(InheritedItem)
 
 IIPolicy::Base.lookup(InheritedItem.new)
 #=> ItemPolicy
+```
+
+### Logging
+
+Policy supports instrumentation hook supplied by `ActiveSupport::Notifications`.
+You can enable log subscriber as follows:
+
+```ruby
+IIPolicy::LogSubscriber.attach_to :ii_policy
+```
+
+This subscriber will write logs in debug mode as the following example:
+
+```
+Called ItemPolicy#index? for Item#1 and return true (Duration: 0.1ms, Allocations: 9)
 ```
 
 ## Contributing
