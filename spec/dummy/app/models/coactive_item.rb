@@ -1,0 +1,2 @@
+class CoactiveItem < Item
+end

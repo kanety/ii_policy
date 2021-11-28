@@ -1,2 +1,0 @@
-class ChainItem < Item
-end

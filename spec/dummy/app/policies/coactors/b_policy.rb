@@ -1,8 +1,8 @@
-class Chains::BPolicy < IIPolicy::Base
+class Coactors::BPolicy < IIPolicy::Base
   before_call do
     @user = @context.user
-    @context.chains ||= []
-    @context.chains << 'B'
+    @context.coactors ||= []
+    @context.coactors << 'B'
   end
 
   def index?

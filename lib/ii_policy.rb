@@ -1,4 +1,5 @@
 require 'active_support'
+require 'coactive'
 
 require 'ii_policy/version'
 require 'ii_policy/config'

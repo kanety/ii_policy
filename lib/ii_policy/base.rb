@@ -5,7 +5,7 @@ require_relative 'core'
 require_relative 'callbacks'
 require_relative 'instrumentation'
 require_relative 'lookup'
-require_relative 'chain'
+require_relative 'coactors'
 
 module IIPolicy
   class Base
@@ -13,6 +13,6 @@ module IIPolicy
     include Callbacks
     include Instrumentation
     include Lookup
-    include Chain
+    include Coactors
   end
 end

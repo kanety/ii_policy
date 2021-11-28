@@ -5,5 +5,5 @@ Rails.application.routes.draw do
       get :export
     end
   end
-  resources :chain_items
+  resources :coactive_items
 end

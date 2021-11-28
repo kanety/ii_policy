@@ -175,9 +175,9 @@ class ItemPolicy < IIPolicy::Base
 end
 ```
 
-#### Policy chain
+#### Coactors
 
-You can chain shared policies to base policy by using `chain` as follows:
+You can define multiple coactors by using `coact` as follows:
 
 ```ruby
 # shared policy
@@ -189,7 +189,7 @@ end
 
 # base policy
 class ItemPolicy < IIPolicy::Base
-  chain SharedPolicy
+  coact SharedPolicy
 
   def show?
     @item.status != 'deleted'
@@ -203,22 +203,7 @@ policy.allowed(:show?)
 
 In this example, `policy.allowed(:show?)` is evaluated by `SharedPolicy#show? && ItemPolicy#show?`.
 
-You can also use method or block to find policy class dynamically:
-
-```ruby
-class ItemPolicy < IIPolicy::Base
-  chain -> { SharedPolicy }
-end
-
-class ItemPolicy < IIPolicy::Base
-  chain :chain_policy
-
-  def chain_policy
-    SharedPolicy
-  end
-end
-```
-
+See [coactive](https://github.com/kanety/coactive) for more `coact` examples:
 
 ### Lookup for policy
 
