@@ -9,5 +9,9 @@ module IIPolicy
     ActiveSupport.on_load :action_view do
       ActionView::Base.send :include, IIPolicy::Helper
     end
+
+    ActiveSupport::Reloader.to_prepare do
+      IIPolicy::Lookup.cache.clear
+    end
   end
 end
