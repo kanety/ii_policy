@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2.1.0
+
+* Add traversal config.
+* Add callbacks for `call_all`.
+* Add calling instrumentation.
+* Clear class cache when reloaded.
+* Bump coactive version to 0.2.
+
 ## 2.0.0
 
 * Replace chain feature with coactive.
