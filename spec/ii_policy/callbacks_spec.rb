@@ -9,7 +9,7 @@ describe IIPolicy::Callbacks do
     end
 
     it 'calls callback' do
-      policy.call(:index?)
+      policy.allowed(:index?)
       expect(policy.instance_variable_get('@callback')).to eq('before')
     end
   end
@@ -20,7 +20,7 @@ describe IIPolicy::Callbacks do
     end
 
     it 'calls callback' do
-      policy.call(:index?)
+      policy.allowed(:index?)
       expect(policy.instance_variable_get('@callback')).to eq('after')
     end
   end
@@ -31,7 +31,7 @@ describe IIPolicy::Callbacks do
     end
 
     it 'calls callback' do
-      policy.call(:index?)
+      policy.allowed(:index?)
       expect(policy.instance_variable_get('@callback')).to eq('around')
     end
   end

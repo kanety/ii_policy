@@ -20,7 +20,7 @@ module IIPolicy
 
     def authorize(item, context = {})
       instance = policy(item, context)
-      raise IIPolicy::AuthorizationError.new('Not Authorized') unless instance.call("#{action_name}?")
+      raise IIPolicy::AuthorizationError.new('Not Authorized') unless instance.allowed("#{action_name}?")
       instance
     end
   end

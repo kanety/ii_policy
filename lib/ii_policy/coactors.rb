@@ -18,12 +18,5 @@ module IIPolicy
         alias_method :chain, :coact
       end
     end
-
-    def call(action)
-      coactors.each do |policy|
-        return false unless policy.new(@context).call(action)
-      end
-      super
-    end
   end
 end

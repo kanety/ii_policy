@@ -262,7 +262,9 @@ IIPolicy::LogSubscriber.attach_to :ii_policy
 This subscriber will write logs in debug mode as the following example:
 
 ```
-Called ItemPolicy#index? for Item#1 and return true (Duration: 0.1ms, Allocations: 9)
+Calling ItemPolicy#index? with #<IIPolicy::Context ...>
+...
+Called ItemPolicy#index? and return true (Duration: 0.1ms, Allocations: 9)
 ```
 
 ## Contributing

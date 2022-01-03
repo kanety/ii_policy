@@ -18,6 +18,13 @@ module IIPolicy
       @user = @context.user
     end
 
+    def call_all(action)
+      coactors.each do |policy|
+        return false unless policy.new(@context).call_all(action)
+      end
+      call(action)
+    end
+
     def call(action)
       if respond_to?(action) && !send(action)
         @_result = false
@@ -27,7 +34,7 @@ module IIPolicy
     end
 
     def allowed(action)
-      call(action)
+      call_all(action)
     end
 
     def policy(item)

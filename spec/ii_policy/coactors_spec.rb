@@ -12,7 +12,7 @@ describe IIPolicy::Coactors do
   end
 
   it 'calls coactors' do
-    policy.call(:index?)
+    policy.allowed(:index?)
     expect(policy.context.coactors).to eq(['A', 'B', 'MAIN'])
   end
 end
