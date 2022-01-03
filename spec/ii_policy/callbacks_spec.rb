@@ -4,35 +4,47 @@ describe IIPolicy::Callbacks do
   end
 
   context 'before' do
-    let :policy do
-      Callbacks::BeforePolicy.new(user: current_user)
-    end
+    [Callbacks::BeforeAllPolicy, Callbacks::BeforeCallPolicy].each do |policy_klass|
+      context policy_klass do
+        let :policy do
+          policy_klass.new(user: current_user)
+        end
 
-    it 'calls callback' do
-      policy.allowed(:index?)
-      expect(policy.instance_variable_get('@callback')).to eq('before')
+        it 'calls callback' do
+          policy.allowed(:index?)
+          expect(policy.instance_variable_get('@callback')).to eq('before')
+        end
+      end
     end
   end
 
   context 'after' do
-    let :policy do
-      Callbacks::AfterPolicy.new(user: current_user)
-    end
+    [Callbacks::AfterAllPolicy, Callbacks::AfterCallPolicy].each do |policy_klass|
+      context policy_klass do
+        let :policy do
+          policy_klass.new(user: current_user)
+        end
 
-    it 'calls callback' do
-      policy.allowed(:index?)
-      expect(policy.instance_variable_get('@callback')).to eq('after')
+        it 'calls callback' do
+          policy.allowed(:index?)
+          expect(policy.instance_variable_get('@callback')).to eq('after')
+        end
+      end
     end
   end
 
   context 'around' do
-    let :policy do
-      Callbacks::AroundPolicy.new(user: current_user)
-    end
+    [Callbacks::AroundAllPolicy, Callbacks::AroundCallPolicy].each do |policy_klass|
+      context policy_klass do
+        let :policy do
+          policy_klass.new(user: current_user)
+        end
 
-    it 'calls callback' do
-      policy.allowed(:index?)
-      expect(policy.instance_variable_get('@callback')).to eq('around')
+        it 'calls callback' do
+          policy.allowed(:index?)
+          expect(policy.instance_variable_get('@callback')).to eq('around')
+        end
+      end
     end
   end
 end

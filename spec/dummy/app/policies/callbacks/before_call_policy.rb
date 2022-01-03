@@ -1,4 +1,4 @@
-class Callbacks::BeforePolicy < ItemPolicy
+class Callbacks::BeforeCallPolicy < ItemPolicy
   before_call do
     @callback = 'before'
   end
