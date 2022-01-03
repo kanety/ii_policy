@@ -16,10 +16,22 @@ module IIPolicy
     end
 
     def call_all(action)
-      coactors.each do |policy|
-        return false unless policy.new(@context).call_all(action)
+      planned = case IIPolicy.config.traversal
+        when :preorder
+          [self] + coactors
+        when :postorder
+          coactors + [self]
+        when :inorder
+          planned = coactors.in_groups(2, false)
+          planned[0] + [self] + planned[1]
+        end
+
+      planned.each do |policy|
+        result = policy == self ? call(action) : policy.new(@context).call_all(action)
+        return false unless result
       end
-      call(action)
+
+      return true
     end
 
     def call(action)

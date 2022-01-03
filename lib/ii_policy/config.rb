@@ -5,7 +5,8 @@ module IIPolicy
     class_attribute :data
 
     self.data = {
-      lookup_cache: true
+      lookup_cache: true,
+      traversal: :postorder
     }
 
     data.keys.each do |key|
