@@ -1,8 +1,8 @@
-class Coactors::BPolicy < IIPolicy::Base
+class Coactors::BPolicy < ApplicationPolicy
+  context :called, default: []
+
   before_call do
-    @user = @context.user
-    @context.coactors ||= []
-    @context.coactors << 'B'
+    @context.called << 'B'
   end
 
   def index?

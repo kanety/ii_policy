@@ -1,9 +1,10 @@
-class CoactiveItemPolicy < IIPolicy::Base
+class CoactiveItemPolicy < ApplicationPolicy
   coact Coactors::APolicy, Coactors::BPolicy
 
+  context :called, default: []
+
   before_call do
-    @context.coactors ||= []
-    @context.coactors << 'MAIN'
+    @context.called << 'MAIN'
   end
 
   def index?

@@ -1,4 +1,4 @@
-class ItemPolicy < IIPolicy::Base
+class ItemPolicy < ApplicationPolicy
   def index?
     true
   end
