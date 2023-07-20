@@ -6,7 +6,7 @@ module IIPolicy
       debug do
         policy = event.payload[:policy]
         action = event.payload[:action]
-        "Calling #{policy.class}##{action} with #{policy.context}"
+        "  Calling #{policy.class}##{action} with #{policy.context}"
       end
     end
 
@@ -14,7 +14,7 @@ module IIPolicy
       debug do
         policy = event.payload[:policy]
         action = event.payload[:action]
-        "Called #{policy.class}##{action} and return #{policy._result} (#{additional_log(event)})"
+        "  Called #{policy.class}##{action} and return #{policy._result} (#{additional_log(event)})"
       end
     end
 
