@@ -9,6 +9,8 @@ require "ii_policy"
 
 module Dummy
   class Application < Rails::Application
+    config.load_defaults Rails::VERSION::STRING.to_f if config.respond_to?(:load_defaults)
+
     config.after_initialize do
       IIPolicy::LogSubscriber.attach_to(:ii_policy)
     end
