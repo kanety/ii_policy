@@ -2,7 +2,7 @@
 
 module IIPolicy
   class LogSubscriber < ActiveSupport::LogSubscriber
-    def calling(event)
+    def start_call_all(event)
       debug do
         policy = event.payload[:policy]
         action = event.payload[:action]
@@ -10,7 +10,7 @@ module IIPolicy
       end
     end
 
-    def call(event)
+    def process_call(event)
       debug do
         policy = event.payload[:policy]
         action = event.payload[:action]
