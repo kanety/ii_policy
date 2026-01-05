@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.4.0
+
+* Drop support for ruby <= 2.7, rails <= 6.1.
+
 ## 2.3.0
 
 * Change name of instrumentation for rails 7.1.
